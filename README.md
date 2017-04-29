@@ -5,7 +5,6 @@ General theory on life history evolution in variable environments.
 Graphical plots of results.
 
 ## Source
-R code 
 * *bethedging_localanalyses*: Calculation of environmental variance effects, including threshold variance for bet-hedging, for mixes of flat and convex, linear, and concave response functions.
 * *grafen_trials*: Figures to help understand reproductive values perspective on bet-hedging (Grafen 1999 Proc Roy Soc). 
 * *bethedge_popgrowthplots*: Plots of r~z for pure types and a 50% mix phenotype, for convex, concave, and mixed response types. 
