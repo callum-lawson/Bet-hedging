@@ -16,3 +16,4 @@ Graphical plots of results.
 * *bethedge_godfrayrees_generalDD_repclim*: Simulations to see how underlying mean and variance in germination thresholds translates to population growth rates and density under variable rainfall.
 * *bethedge_godfrayrees*: Old version of threshold germination simulations, kept for its annotations.
 * *extinction_time*: Simulations to investigate relationships between environmental variance, stochastic growth rate, and mean time to extinction.
+* *logit_scale_p*: How does stochastic growth rate relate to p when p is on a logit scale?
