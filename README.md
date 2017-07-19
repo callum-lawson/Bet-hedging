@@ -17,3 +17,4 @@ Graphical plots of results.
 * *bethedge_godfrayrees*: Old version of threshold germination simulations, kept for its annotations.
 * *extinction_time*: Simulations to investigate relationships between environmental variance, stochastic growth rate, and mean time to extinction.
 * *logit_scale_p*: How does stochastic growth rate relate to p when p is on a logit scale?
+* *plasticity_discrimination*: How do the reliability and discrimination ability of a signal relate to each other?
