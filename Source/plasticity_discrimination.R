@@ -4,24 +4,50 @@
 
 require(MASS)
 
-zmu <- 0
-wmu <- 0 # irrelevant
-zsd <- 0.1
-wsd <- 1
-rho <- 0.8
+zwdist <- function(zmu,wmu,zsd,wsd,rho=0.8,nsim=10^6,...){
+  zw_mu <- c(zmu,wmu)
+  set.seed(1)
+  zw_sig <- matrix(c(zsd^2,rep(rho*zsd*wsd,2),wsd^2),nr=2,nc=2)
+  zw <- mvrnorm(n=nsim, mu=zw_mu, Sigma=zw_sig)
+  colnames(zw) <- c("z","w")
+  zw <- as.data.frame(zw)
   
-nsim <- 10^6
-zw_mu <- c(zmu,wmu)
-set.seed(1)
-zw_sig <- matrix(c(zsd^2,rep(rho*zsd*wsd,2),wsd^2),nr=2,nc=2)
-zw <- mvrnorm(n=nsim, mu=zw_mu, Sigma=zw_sig)
-colnames(zw) <- c("z","w")
-zw <- as.data.frame(zw)
+  zw$wcat <- cut(zw$w,...)
+  byw <- with(zw,split(z,wcat))
+  
+  list(zw=zw,byw=byw)
+}
 
-zw$wcat <- cut(zw$w,breaks=100)
-byw <- with(zw,split(z,wcat))
+mybreaks <- c(-1.05,-0.95,-0.05,0.05,0.95,1.05)
 
-plot(density(byw[[50]]))
-lines(density(byw[[40]]),col="red")
-lines(density(byw[[60]]),col="blue")
-  # Increasing zsd only scales z up and down - doesn't change discrimination ability
+# Imperfect information ---------------------------------------------------
+
+zw1 <- zwdist(zmu=0,wmu=0,zsd=0.1,wsd=1,breaks=mybreaks)
+zw2 <- zwdist(zmu=0,wmu=0,zsd=0.1*2,wsd=1*2,breaks=mybreaks)
+zw3 <- zwdist(zmu=-0.1,wmu=-1,zsd=0.1,wsd=1,breaks=mybreaks)
+
+par(mfrow=c(1,1))
+plot(density(zw1$byw[[1]]),lty=1,col="black")
+lines(density(zw1$byw[[3]]),lty=2,col="black")
+lines(density(zw1$byw[[5]]),lty=3,col="black")
+lines(density(zw2$byw[[1]]),lty=1,col="blue")
+lines(density(zw2$byw[[3]]),lty=2,col="blue")
+lines(density(zw2$byw[[5]]),lty=3,col="blue")
+lines(density(zw3$byw[[1]]),lty=1,col="red")
+lines(density(zw3$byw[[3]]),lty=2,col="red")
+lines(density(zw3$byw[[5]]),lty=3,col="red")
+# Increasing zsd only scales z up and down - doesn't change discrimination ability
+
+plot(z~w,data=zw2$zw[1:1000,],col="blue")
+points(z~w,data=zw1$zw[1:1000,],col="black")
+points(z~w,data=zw3$zw[1:1000,],col="red")
+
+# Perfect information -----------------------------------------------------
+
+zw1b <- zwdist(zmu=0,wmu=0,zsd=0.1,wsd=1,breaks=mybreaks,rho=1)
+zw2b <- zwdist(zmu=0,wmu=0,zsd=0.2,wsd=2,breaks=mybreaks,rho=1)
+zw3b <- zwdist(zmu=-0.1,wmu=-1,zsd=0.1,wsd=1,breaks=mybreaks,rho=1)
+
+plot(z~w,data=zw2b$zw[1:1000,],col="blue")
+points(z~w,data=zw1b$zw[1:1000,],col="black")
+points(z~w,data=zw3b$zw[1:1000,],col="red")
